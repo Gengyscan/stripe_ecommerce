@@ -33,11 +33,16 @@ export default class extends Controller {
     const name = point.name
     const address = [point.address.line1, point.address.line2].filter(Boolean).join(", ")
 
+    const nameEl = document.createElement("p")
+    nameEl.className = "text-sm font-medium"
+    nameEl.textContent = name
+
+    const addrEl = document.createElement("p")
+    addrEl.className = "text-xs text-base-content/60"
+    addrEl.textContent = address
+
     this.selectedPointTarget.classList.remove("hidden")
-    this.selectedPointTarget.innerHTML = `
-      <p class="text-sm font-medium">${name}</p>
-      <p class="text-xs text-base-content/60">${address}</p>
-    `
+    this.selectedPointTarget.replaceChildren(nameEl, addrEl)
 
     this.saveDelivery({
       delivery_type: "in_post",
@@ -48,7 +53,7 @@ export default class extends Controller {
 
   saveDelivery(params) {
     const url = this.orderUrlTarget.value
-    const csrfToken = document.querySelector("meta[name=\'csrf-token\']").content
+    const csrfToken = document.querySelector("meta[name='csrf-token']").content
 
     fetch(url, {
       method: "PATCH",
@@ -62,7 +67,7 @@ export default class extends Controller {
   }
 
   loadGeoWidget() {
-    if (document.querySelector("script[src*=\'inpost-geowidget\']")) return
+    if (document.querySelector("script[src*='inpost-geowidget']")) return
 
     const link = document.createElement("link")
     link.rel = "stylesheet"
